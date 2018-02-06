@@ -35,11 +35,19 @@ class explorer_pane(object):
         buf = []
 
         for i in range(0, len(self.objects)):
+            obj = self.objects[i]
+
             if self.current_line == i and self.focused:
                 str = '--> '
             else:
                 str = '    '
-            str += self.objects[i].name
+
+            str += obj.name
+
+            if obj.type == 'folder':
+                str += '/'
+            else:
+                str += ''
             buf.append(str)
 
         return buf
