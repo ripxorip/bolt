@@ -50,21 +50,27 @@ class bolt(object):
     # Explorer exclusive commands
     # ==========================================
     def move(self, dest, commander):
+        # Need to pass on ID as well
         self.commanders[commander].move(dest)
 
     def delete(self, commander):
+        # Need to pass on ID as well
         self.commanders[commander].delete()
 
     def rename(self, newName, commander):
+        # Need to pass on ID as well
         self.commanders[commander].rename(newName)
 
     def copy(self, dest, commander):
+        # Need to pass on ID as well
         self.commanders[commander].copy(dest)
 
     def mkdir(self, name, commander):
+        # Need to pass on ID as well
         self.commanders[commander].mkdir(name)
 
     def createFile(self, name, commander):
+        # Need to pass on ID as well
         self.commanders[commander].createFile(name)
 
     def cd(self, commander, id):
