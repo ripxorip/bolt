@@ -7,10 +7,12 @@
 import curses
 from bolt_tui.tui import tui
 
+
 def print_panes(stdscr, bolt):
     buffer = bolt.get_panes()
     for i in range(0, len(buffer)):
         stdscr.addstr(i, 0, buffer[i])
+
 
 def main(stdscr):
     input_buffer = ''
@@ -27,7 +29,6 @@ def main(stdscr):
 
     # print the panes
     print_panes(stdscr, bolt)
-    
     debug_line = curses.LINES - 1
 
     while True:
@@ -59,7 +60,8 @@ def main(stdscr):
 
         print_panes(stdscr, bolt)
         stdscr.addstr(debug_line, 1, input_buffer)
-        stdscr.addstr(debug_line, curses.COLS-10, str(curses.LINES) + ' x ' + str(curses.COLS))
+        stdscr.addstr(debug_line, curses.COLS-10,
+                      str(curses.LINES) + ' x ' + str(curses.COLS))
 
 
 curses.wrapper(main)

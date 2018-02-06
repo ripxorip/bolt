@@ -4,6 +4,7 @@
 # License: MIT license
 # ============================================================================
 
+
 class explorer_pane(object):
     current_line = 0
 
@@ -40,7 +41,6 @@ class explorer_pane(object):
         ret.append(leadingC + bar)
         return ret
 
-
     def set_objects(self, objects):
         self.current_line = 0
         self.objects = objects
@@ -52,7 +52,7 @@ class explorer_pane(object):
         return self.objects[self.current_line]
 
     def get_explorer_id(self):
-        return self.explorer_id 
+        return self.explorer_id
 
     def cmd_up(self):
         self.current_line = max(0, self.current_line-1)

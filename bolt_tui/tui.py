@@ -2,6 +2,7 @@ from bolt_tui.explorer_pane import explorer_pane
 from bolt.bolt import bolt
 from math import floor
 
+
 class tui(object):
     panes = []
 
@@ -12,8 +13,17 @@ class tui(object):
 
         self.bolt = bolt()
 
-        self.panes.append(explorer_pane(True, self.bolt.getListing('exp1'), 'exp1', self.bolt.getCwd('exp1'), pane_width, height))
-        self.panes.append(explorer_pane(False, self.bolt.getListing('exp2'), 'exp2', self.bolt.getCwd('exp2'), pane_width, height))
+        self.panes.append(explorer_pane(True,
+                                        self.bolt.getListing('exp1'),
+                                        'exp1',
+                                        self.bolt.getCwd('exp1'),
+                                        pane_width,
+                                        height))
+        self.panes.append(explorer_pane(False,
+                                        self.bolt.getListing('exp2'),
+                                        'exp2',
+                                        self.bolt.getCwd('exp2'),
+                                        pane_width, height))
 
         self.selected = 0
 
