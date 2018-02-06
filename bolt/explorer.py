@@ -68,6 +68,8 @@ class explorer(object):
 
     def cd(self, id):
         path = self.getEntryAtId(id).name
+        if(id == -1):
+            path = '..'
         self.cwd = os.path.abspath(os.path.join(self.cwd, path))
         self.createNewListing()
 
