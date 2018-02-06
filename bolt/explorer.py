@@ -37,37 +37,33 @@ class explorer(object):
         self.filteredListing = self.currentListing[:]
 
     def rename(self, newName):
-        # Not done
-        os.rename(self.getSelected()[0], os.path.join(self.cwd, newName))
+        os.rename(self.getEntryAtId(id).name, os.path.join(self.cwd, newName))
         self.cd('.')
 
     def copy(self, id, dest):
-        # Not done
-        selFile = self.getSelected()[0]
+        selFile = self.getEntryAtId(id).name
         if os.path.isdir(selFile):
             shutil.copytree(selFile, dest)
         else:
             shutil.copy(selFile, dest)
 
     def delete(self, id, yesno):
-        # Not done
+        path = self.getEntryAtId(id).name
         if yesno == "y":
-            selFile = self.getSelected()[0]
+            selFile = path
             if os.path.isdir(selFile):
                 shutil.rmtree(selFile)
             else:
                 os.remove(selFile)
 
     def move(self, id, dest):
-        # Not done
-        os.rename(self.getSelected()[0], dest)
+        path = self.getEntryAtId(id).name
+        os.rename(path, dest)
 
     def mkdir(self, name):
-        # Not done
         os.makedirs(os.path.join(self.cwd, name))
 
     def createFile(self, name):
-        # Not done
         open(os.path.join(self.cwd, name), 'a').close()
 
     def cd(self, id):
