@@ -13,6 +13,8 @@ def print_panes(stdscr, bolt):
         stdscr.addstr(i, 0, buffer[i])
 
 def main(stdscr):
+    input_buffer = ''
+
     # calculate width & height
     width = curses.COLS
     height = curses.LINES - 1
@@ -35,28 +37,28 @@ def main(stdscr):
             break
         stdscr.clear()
 
-        if c == 'q':
-            break
-        elif c == '\t':
+        if c == '\t':
             bolt.cmd_tab()
-            stdscr.addstr(debug_line, 1, 'tab      ')
         elif c == 'KEY_UP':
             bolt.cmd_up()
-            stdscr.addstr(debug_line, 1, 'up       ')
         elif c == 'KEY_DOWN':
             bolt.cmd_down()
-            stdscr.addstr(debug_line, 1, 'down     ')
         elif c == '\x7f':
-            bolt.cmd_backspace()
-            stdscr.addstr(debug_line, 1, 'backspace')
+            if input_buffer == '':
+                bolt.cmd_backspace()
+            else:
+                input_buffer = input_buffer[:-1]
+                bolt.filter(input_buffer)
+
         elif c == '\x0a' or c == '\x0d':
             bolt.cmd_enter()
-            stdscr.addstr(debug_line, 1, 'enter    ')
         else:
-            stdscr.addstr(debug_line, 1, c)
+            input_buffer += c
+            bolt.filter(input_buffer)
 
         print_panes(stdscr, bolt)
-        stdscr.addstr(debug_line,15, str(curses.LINES) + ' x ' + str(curses.COLS))
+        stdscr.addstr(debug_line, 1, input_buffer)
+        stdscr.addstr(debug_line, curses.COLS-10, str(curses.LINES) + ' x ' + str(curses.COLS))
 
 
 curses.wrapper(main)

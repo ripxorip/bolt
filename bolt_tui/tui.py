@@ -42,11 +42,18 @@ class tui(object):
         pane = self.panes[self.selected]
 
         # exucute
-        item_id = pane.get_current_object().id
-        explorer_id = pane.get_explorer_id()
-        self.bolt.cd(explorer_id, item_id)
+        obj = pane.get_current_object()
+        if obj.type == 'folder':
+            explorer_id = pane.get_explorer_id()
+            self.bolt.cd(explorer_id, obj.id)
 
-        # update pane
+            # update pane
+            pane.set_objects(self.bolt.getListing(explorer_id))
+
+    def filter(self, str):
+        pane = self.panes[self.selected]
+        explorer_id = pane.get_explorer_id()
+        self.bolt.updateListing(str, explorer_id)
         pane.set_objects(self.bolt.getListing(explorer_id))
 
     def get_panes(self):
