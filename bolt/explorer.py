@@ -33,7 +33,7 @@ class explorer(object):
                 type = 'folder'
             else:
                 type = 'file'
-            self.currentListing.append(f, type, idx)
+            self.currentListing.append(listingEntry(f, type, idx))
         self.filteredListing = self.currentListing[:]
 
     def rename(self, newName):

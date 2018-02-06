@@ -35,9 +35,6 @@ class bolt(object):
     def updateListing(self, pattern, commander):
         self.commanders[commander].updateListing(pattern)
 
-    def getSelectedFile(self, commander):
-        return self.commanders[commander].getSelected()
-
     def getListing(self, commander):
         return self.commanders[commander].getListing()
 
