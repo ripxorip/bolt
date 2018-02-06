@@ -1,4 +1,5 @@
-from bolt_tui.dummy_pane import dummy_pane
+from bolt_tui.explorer_pane import explorer_pane
+from bolt.bolt import bolt
 from math import floor
 
 class tui(object):
@@ -9,8 +10,10 @@ class tui(object):
         self.pane_width = pane_width
         self.height = height
 
-        self.panes.append(dummy_pane(focused=True))
-        self.panes.append(dummy_pane(focused=False))
+        self.bolt = bolt()
+
+        self.panes.append(explorer_pane(True, self.bolt.getListing('exp1'), 'exp1'))
+        self.panes.append(explorer_pane(False, self.bolt.getListing('exp2'), 'exp2'))
 
         self.selected = 0
 
@@ -24,6 +27,27 @@ class tui(object):
         self.panes[self.selected].set_focus(False)
         self.selected = (self.selected + 1) % 2
         self.panes[self.selected].set_focus(True)
+
+    def cmd_backspace(self):
+        pane = self.panes[self.selected]
+
+        # execute
+        explorer_id = pane.get_explorer_id()
+        self.bolt.cd(explorer_id, -1)
+
+        # update pane
+        pane.set_objects(self.bolt.getListing(explorer_id))
+
+    def cmd_enter(self):
+        pane = self.panes[self.selected]
+
+        # exucute
+        item_id = pane.get_current_object().id
+        explorer_id = pane.get_explorer_id()
+        self.bolt.cd(explorer_id, item_id)
+
+        # update pane
+        pane.set_objects(self.bolt.getListing(explorer_id))
 
     def get_panes(self):
         left_pane = self.panes[0].get_pane()

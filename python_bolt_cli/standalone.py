@@ -47,8 +47,10 @@ def main(stdscr):
             bolt.cmd_down()
             stdscr.addstr(debug_line, 1, 'down     ')
         elif c == '\x7f':
+            bolt.cmd_backspace()
             stdscr.addstr(debug_line, 1, 'backspace')
         elif c == '\x0a' or c == '\x0d':
+            bolt.cmd_enter()
             stdscr.addstr(debug_line, 1, 'enter    ')
         else:
             stdscr.addstr(debug_line, 1, c)
