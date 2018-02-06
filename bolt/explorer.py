@@ -85,3 +85,6 @@ class explorer(object):
 
     def getListing(self):
         return self.filteredListing
+    
+    def getCwd(self):
+        return self.cwd

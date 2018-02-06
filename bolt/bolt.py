@@ -43,7 +43,7 @@ class bolt(object):
     # ==========================================
     def search(self, filePattern, inputPattern,
                fromCommander, commander):
-        dir = self.commanders[fromCommander].cwd
+        dir = self.commanders[fromCommander].getCwd()
         self.commanders[commander].search(dir, filePattern, inputPattern)
 
     # ==========================================
@@ -75,6 +75,9 @@ class bolt(object):
 
     def cd(self, commander, id):
         self.commanders[commander].cd(id)
+
+    def getCwd(self, commander):
+        return self.commanders[commander].getCwd()
 
     # ==========================================
     # Explorer to explorer commands

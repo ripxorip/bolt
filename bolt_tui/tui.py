@@ -12,8 +12,8 @@ class tui(object):
 
         self.bolt = bolt()
 
-        self.panes.append(explorer_pane(True, self.bolt.getListing('exp1'), 'exp1'))
-        self.panes.append(explorer_pane(False, self.bolt.getListing('exp2'), 'exp2'))
+        self.panes.append(explorer_pane(True, self.bolt.getListing('exp1'), 'exp1', self.bolt.getCwd('exp1'), pane_width, height))
+        self.panes.append(explorer_pane(False, self.bolt.getListing('exp2'), 'exp2', self.bolt.getCwd('exp2'), pane_width, height))
 
         self.selected = 0
 
@@ -30,25 +30,35 @@ class tui(object):
 
     def cmd_backspace(self):
         pane = self.panes[self.selected]
+        explorer_id = pane.get_explorer_id()
 
         # execute
-        explorer_id = pane.get_explorer_id()
         self.bolt.cd(explorer_id, -1)
 
+        # get new info
+        cwd = self.bolt.getCwd(explorer_id)
+        listing = self.bolt.getListing(explorer_id)
+
         # update pane
-        pane.set_objects(self.bolt.getListing(explorer_id))
+        pane.set_objects(listing)
+        pane.setCwd(cwd)
 
     def cmd_enter(self):
         pane = self.panes[self.selected]
+        explorer_id = pane.get_explorer_id()
 
         # exucute
         obj = pane.get_current_object()
         if obj.type == 'folder':
-            explorer_id = pane.get_explorer_id()
             self.bolt.cd(explorer_id, obj.id)
 
+            # get new info
+            cwd = self.bolt.getCwd(explorer_id)
+            listing = self.bolt.getListing(explorer_id)
+
             # update pane
-            pane.set_objects(self.bolt.getListing(explorer_id))
+            pane.set_objects(listing)
+            pane.setCwd(cwd)
 
     def filter(self, str):
         pane = self.panes[self.selected]
