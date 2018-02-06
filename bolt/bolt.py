@@ -38,9 +38,6 @@ class bolt(object):
     def getSelectedFile(self, commander):
         return self.commanders[commander].getSelected()
 
-    def changeSelection(self, offset, commander):
-        self.commanders[commander].changeSelection(offset)
-
     def getListing(self, commander):
         return self.commanders[commander].getListing()
 
@@ -72,6 +69,9 @@ class bolt(object):
 
     def createFile(self, name, commander):
         self.commanders[commander].createFile(name)
+
+    def cd(self, commander, id):
+        self.commanders[commander].cd(id)
 
     # ==========================================
     # Explorer to explorer commands

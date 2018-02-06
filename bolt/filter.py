@@ -12,7 +12,7 @@ class filter(object):
 
     def __search(self, input, pattern, output):
         for entry in input[:]:
-            res = re.search(pattern, entry, re.IGNORECASE)
+            res = re.search(pattern, entry.name, re.IGNORECASE)
             if res is not None:
                 output.append(entry)
                 input.remove(entry)

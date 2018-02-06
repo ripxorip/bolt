@@ -8,6 +8,13 @@ import shutil
 from bolt.filter import filter
 
 
+class listingEntry(object):
+    def __init__(self, name, type, id):
+        self.type = type
+        self.name = name
+        self.id = id
+
+
 class explorer(object):
     """ Class for an explorer that is used in the panes """
     def __init__(self, cwd):
@@ -15,83 +22,67 @@ class explorer(object):
         # Instance of the filter
         self.filter = filter()
         self.cwd = cwd
-        # The the current files
-        self.currentFiles = os.listdir(self.cwd)
-        self.fileredFiles = self.currentFiles[:]
-        # Index that tracks which file that is selected
-        self.selected = 0
-        self.active = True
-        self.pattern = ''
-        # The header takes up 9 rows
-        self.headerLength = 9
+        self.createNewListing()
+
+    def createNewListing(self):
+        rawFiles = os.listdir(self.cwd)
+        self.currentListing = []
+        # Create current files
+        for idx, f in enumerate(rawFiles):
+            if(os.path.isdir(os.path.join(self.cwd, f))):
+                type = 'folder'
+            else:
+                type = 'file'
+            self.currentListing.append(f, type, idx)
+        self.filteredListing = self.currentListing[:]
 
     def rename(self, newName):
+        # Not done
         os.rename(self.getSelected()[0], os.path.join(self.cwd, newName))
         self.cd('.')
-        self.updateListing(self.pattern)
 
-    def copy(self, dest):
+    def copy(self, id, dest):
+        # Not done
         selFile = self.getSelected()[0]
         if os.path.isdir(selFile):
             shutil.copytree(selFile, dest)
         else:
             shutil.copy(selFile, dest)
-        self.cd('.')
-        self.updateListing(self.pattern)
 
-    def delete(self, yesno):
+    def delete(self, id, yesno):
+        # Not done
         if yesno == "y":
             selFile = self.getSelected()[0]
             if os.path.isdir(selFile):
                 shutil.rmtree(selFile)
             else:
                 os.remove(selFile)
-            self.cd('.')
-            self.updateListing(self.pattern)
 
-    def move(self, dest):
+    def move(self, id, dest):
+        # Not done
         os.rename(self.getSelected()[0], dest)
-        self.cd('.')
-        self.updateListing(self.pattern)
 
     def mkdir(self, name):
+        # Not done
         os.makedirs(os.path.join(self.cwd, name))
-        self.cd('.')
-        self.updateListing(self.pattern)
 
     def createFile(self, name):
+        # Not done
         open(os.path.join(self.cwd, name), 'a').close()
-        self.cd('.')
-        self.updateListing(self.pattern)
 
-    def cd(self, path):
+    def cd(self, id):
+        path = self.getEntryAtId(id).name
         self.cwd = os.path.abspath(os.path.join(self.cwd, path))
-        self.currentFiles = os.listdir(self.cwd)
-        self.fileredFiles = self.currentFiles[:]
-        self.changeSelection(0)
+        self.createNewListing()
 
     def updateListing(self, pattern):
         self.pattern = pattern
-        self.filter.filter(self.currentFiles, pattern, self.fileredFiles)
-        self.changeSelection(0)
+        self.filter.filter(self.currentListing, pattern, self.filteredListing)
 
-    def changeSelection(self, offset):
-        self.selected += offset
-        if self.selected < 0:
-            self.selected = 0
-        elif self.selected >= len(self.fileredFiles):
-            self.selected = len(self.fileredFiles)-1
-
-    def getSelected(self):
-        pathToFile = os.path.join(self.cwd, self.fileredFiles[self.selected])
-        return pathToFile, None
+    def getEntryAtId(self, id):
+        for entry in self.currentListing:
+            if(entry.id == id):
+                return entry
 
     def getListing(self):
-        folders = []
-        files = []
-        for f in self.fileredFiles:
-            if(os.path.isdir(os.path.join(self.cwd, f))):
-                folders.append(f)
-            else:
-                files.append(f)
-        return {folders, files}
+        return self.filteredListing
