@@ -52,6 +52,7 @@ def main(stdscr):
 
         elif c == '\x0a' or c == '\x0d':
             bolt.cmd_enter()
+            input_buffer = ''
         else:
             input_buffer += c
             bolt.filter(input_buffer)

@@ -74,6 +74,11 @@ class explorer_pane(object):
             else:
                 str = '    '
 
+            if obj.type == 'folder':
+                str += '+'
+            else:
+                str += ' '
+
             str += obj.name
 
             if obj.type == 'folder':
