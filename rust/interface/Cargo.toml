@@ -1,0 +1,11 @@
+[package]
+name = "interface"
+version = "0.1.0"
+authors = ["Philip Karlsson <philipkarlsson@me.com>"]
+
+[lib]
+name = "bolt"
+crate-type = ["dylib"]
+
+[dependencies]
+core = {path = "../core"}
