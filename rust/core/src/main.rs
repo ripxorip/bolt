@@ -10,7 +10,7 @@ fn main() {
     println!("--- Exp1 cwd ---");
     println!("{}", bolt.get_cwd(0));
     println!("--- Listing exp1 ---");
-    // FIXME: Understand mutability! ;)
+    // https://doc.rust-lang.org/1.8.0/book/references-and-borrowing.html#the-rules
     {
         let files = bolt.get_listing(0);
         for f in files {
