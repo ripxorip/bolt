@@ -1,4 +1,5 @@
 use explorer::Explorer;
+use explorer::BoltListEntry;
 use std::path;
 use std::vec;
 
@@ -27,11 +28,10 @@ impl Bolt {
     }
 
     pub fn get_cwd(&self,  exp_index:i32) -> String {
-        //FIXME: Add safety check for index
         self.get_exp(exp_index).get_cwd()
     }
 
-    pub fn get_listing(&self, exp_index: i32) -> &vec::Vec<String> {
+    pub fn get_listing(&self, exp_index: i32) -> &vec::Vec<BoltListEntry> {
         self.get_exp(exp_index).get_listing()
     }
 
