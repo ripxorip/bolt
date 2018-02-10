@@ -1,15 +1,17 @@
+use std::path;
+
 pub struct Explorer {
-    cwd: String,
+    cwd: path::PathBuf,
 }
 
 impl Explorer {
-    pub fn new(cwd: String) -> Explorer {
+    pub fn new(cwd: path::PathBuf) -> Explorer {
         Explorer{
             cwd: cwd,
         } 
     }
 
-    pub fn get_cwd(&self) -> &str {
-        &self.cwd
+    pub fn get_cwd(&self) -> String {
+        self.cwd.to_string_lossy().into_owned()
     }
 }

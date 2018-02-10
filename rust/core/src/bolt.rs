@@ -1,4 +1,5 @@
 use explorer::Explorer;
+use std::path;
 
 pub struct Bolt {
     // Declare the explorers
@@ -6,13 +7,13 @@ pub struct Bolt {
 }
 
 impl Bolt {
-    pub fn new(cwd: String) -> Bolt {
+    pub fn new(cwd: path::PathBuf) -> Bolt {
         Bolt {
             exp1: Explorer::new(cwd),
         }
     }
 
-    pub fn get_cwd_exp1(&self) -> &str {
+    pub fn get_cwd_exp1(&self) -> String {
         self.exp1.get_cwd()
     }
 }
