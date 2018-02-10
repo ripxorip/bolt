@@ -8,10 +8,9 @@ fn main() {
     let cwd = env::current_dir().unwrap();
     let mut bolt = Bolt::new(cwd);
     println!("--- Exp1 cwd ---");
-    {
-        println!("{}", bolt.get_cwd(0));
-    }
+    println!("{}", bolt.get_cwd(0));
     println!("--- Listing exp1 ---");
+    // FIXME: Understand mutability! ;)
     {
         let files = bolt.get_listing(0);
         for f in files {
