@@ -26,12 +26,12 @@ impl Bolt {
         }
     }
 
-    pub fn get_cwd(&mut self,  exp_index:i32) -> String {
+    pub fn get_cwd(&self,  exp_index:i32) -> String {
         //FIXME: Add safety check for index
         self.get_exp(exp_index).get_cwd()
     }
 
-    pub fn get_listing(&mut self, exp_index: i32) -> &vec::Vec<String> {
+    pub fn get_listing(&self, exp_index: i32) -> &vec::Vec<String> {
         self.get_exp(exp_index).get_listing()
     }
 
