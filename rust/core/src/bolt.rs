@@ -1,7 +1,7 @@
 use explorer::Explorer;
 use explorer::BoltListEntry;
-use std::path;
 use std::vec;
+use std::env;
 
 pub struct Bolt {
     // Declare the explorers
@@ -20,7 +20,8 @@ impl Bolt {
         }
     }
 
-    pub fn new(cwd: path::PathBuf) -> Bolt {
+    pub fn new() -> Bolt {
+        let cwd = env::current_dir().unwrap();
         Bolt {
             exp1: Explorer::new(&cwd),
             exp2: Explorer::new(&cwd),
