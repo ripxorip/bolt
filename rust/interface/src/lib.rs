@@ -28,7 +28,7 @@ pub extern fn bolt_free (ptr: *mut Bolt) {
 } 
 
 #[no_mangle]
-pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, dest: *mut int32_t, len: size_t) {
+pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, offset: int32_t, dest: *mut int32_t, len: size_t) -> i32 {
     let bolt = unsafe {
         assert!(!ptr.is_null());
         &*ptr
@@ -37,13 +37,7 @@ pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, dest: *mut int32_t
         assert!(!dest.is_null());
         slice::from_raw_parts_mut(dest, len as usize)
     };
-
-    let v = bolt.get_listing(id);
-    let mut i = 0;
-    while i < len && i < v.len(){
-        dest_slice[i] = v[i].id;
-        i += 1;
-    }
+    bolt.get_listing(id, offset as usize, dest_slice)
 }
 
 #[no_mangle]
