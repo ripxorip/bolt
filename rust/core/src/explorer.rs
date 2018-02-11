@@ -80,6 +80,11 @@ impl Explorer {
         entry_ref.name.clone()
     }
 
+    pub fn get_entry_type(&self, id: i32) -> String {
+        let entry_ref = self.get_entry_at_id(id).unwrap();
+        entry_ref.file_type.clone()
+    }
+
     pub fn cd(&mut self, id: i32){
         if id < 0 {
             self.cwd.pop();

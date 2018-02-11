@@ -19,6 +19,10 @@ lib.bolt_get_num_entries.argtypes = (c_void_p, c_int32)
 lib.bolt_get_num_entries.restype = c_int32
 # Get attributes
 lib.bolt_cd.argtypes = (POINTER(BoltS), c_int32, c_int32)
+
+lib.bolt_get_entry_type.argtypes = (POINTER(BoltS), c_int32, c_int32)
+lib.bolt_get_entry_type.restype = (c_void_p)
+
 lib.bolt_get_entry_name.argtypes = (POINTER(BoltS), c_int32, c_int32)
 lib.bolt_get_entry_name.restype = (c_void_p)
 
@@ -47,6 +51,13 @@ class Bolt:
         finally:
             lib.bolt_free_string(ptr)
 
+    def get_entry_type(self, id, entryId):
+        ptr = lib.bolt_get_entry_type(self.obj, id, entryId)
+        try:
+            return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        finally:
+            lib.bolt_free_string(ptr)
+
     def get_listing(self, amount, offset, id):
         buf = []
         for i in range(0, amount):
@@ -70,8 +81,8 @@ if __name__ == "__main__":
     bolt = Bolt()
     print("Bolt CWD: " + bolt.get_cwd(0))
     for i in bolt.get_listing(50, 0, 0):
-        print(bolt.get_entry_name(0, i))
+        print(bolt.get_entry_name(0, i) + " - " + bolt.get_entry_type(0, i))
     bolt.cd(0, 1)
     print("Bolt CWD: " + bolt.get_cwd(0))
     for i in bolt.get_listing(50, 0, 0):
-        print(bolt.get_entry_name(0, i))
+        print(bolt.get_entry_name(0, i) + " - " + bolt.get_entry_type(0, i))
