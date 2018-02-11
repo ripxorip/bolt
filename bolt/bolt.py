@@ -1,95 +1,88 @@
-# ============================================================================
-# FILE: bolt.py
-# AUTHOR: Philip Karlsson <philipkarlsson at me.com>
-# License: MIT license
-# ============================================================================
-import os
-from bolt.explorer import explorer
-from bolt.searcher import searcher
+import sys, ctypes
+from ctypes import c_void_p, c_char_p, c_uint32, c_int32, Structure, POINTER, c_size_t
 
 
-class bolt(object):
-    """ Main class for the plugin, manages
-        the input commands and the spawning of
-        explorers """
+class BoltS(Structure):
+    pass
+
+
+# Load bolt
+lib = ctypes.cdll.LoadLibrary('rust/interface/target/release/libbolt.dylib')
+lib.bolt_new.restype = POINTER(BoltS)
+lib.bolt_free.argtypes = (POINTER(BoltS), )
+lib.bolt_get_cwd.argtypes = (POINTER(BoltS), c_int32)
+lib.bolt_get_cwd.restype = (c_void_p)
+lib.bolt_free_string.argtypes = (c_void_p, )
+lib.bolt_get_listing.argtypes = (c_void_p, c_int32, c_int32, POINTER(c_int32), c_size_t)
+lib.bolt_get_listing.restype = c_int32
+lib.bolt_get_num_entries.argtypes = (c_void_p, c_int32)
+lib.bolt_get_num_entries.restype = c_int32
+# Get attributes
+lib.bolt_cd.argtypes = (POINTER(BoltS), c_int32, c_int32)
+
+lib.bolt_get_entry_type.argtypes = (POINTER(BoltS), c_int32, c_int32)
+lib.bolt_get_entry_type.restype = (c_void_p)
+
+lib.bolt_get_entry_name.argtypes = (POINTER(BoltS), c_int32, c_int32)
+lib.bolt_get_entry_name.restype = (c_void_p)
+
+
+class Bolt:
     def __init__(self):
-        # Start in CWD
-        cwd = os.path.abspath(os.getcwd())
-        self.commanders = {}
-        # Create explorers
-        self.commanders['exp1'] = explorer(cwd)
-        self.commanders['exp2'] = explorer(cwd)
-        # Create searchers
-        self.commanders['sea1'] = searcher()
-        self.commanders['sea2'] = searcher()
+        self.obj = lib.bolt_new()
 
-# ============================================================================
-# Bolt Commands
-# ============================================================================
-    # commander is used to lookup which object to use from the dict;
-    # exp1, exp2, sea1, sea2
+    def __enter__(self):
+        return self
 
-    # ==========================================
-    # Generic (explorer or searcher) commands
-    # ==========================================
-    def updateListing(self, pattern, commander):
-        self.commanders[commander].updateListing(pattern)
+    def __exit__(self, exc_type, exc_value, traceback):
+        lib.bolt_free(self.obj)
 
-    def getListing(self, commander):
-        return self.commanders[commander].getListing()
+    def get_cwd(self, id):
+        ptr = lib.bolt_get_cwd(self.obj, id)
+        try:
+            return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        finally:
+            lib.bolt_free_string(ptr)
 
-    # ==========================================
-    # Searcher exclusive commands
-    # ==========================================
-    def search(self, filePattern, inputPattern,
-               fromCommander, commander):
-        dir = self.commanders[fromCommander].getCwd()
-        self.commanders[commander].search(dir, filePattern, inputPattern)
+    def get_entry_name(self, id, entryId):
+        ptr = lib.bolt_get_entry_name(self.obj, id, entryId)
+        try:
+            return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        finally:
+            lib.bolt_free_string(ptr)
 
-    # ==========================================
-    # Explorer exclusive commands
-    # ==========================================
-    def move(self, dest, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].move(dest)
+    def get_entry_type(self, id, entryId):
+        ptr = lib.bolt_get_entry_type(self.obj, id, entryId)
+        try:
+            return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        finally:
+            lib.bolt_free_string(ptr)
 
-    def delete(self, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].delete()
+    def get_listing(self, amount, offset, id):
+        buf = []
+        for i in range(0, amount):
+            buf.append(0)
+        buf_type = c_int32 * len(buf)
+        rBuf = buf_type(*buf)
+        numRet = lib.bolt_get_listing(self.obj, id, offset, rBuf, len(buf))
+        res = []
+        for i in range(0, numRet):
+            res.append(rBuf[i])
+        return res
 
-    def rename(self, newName, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].rename(newName)
+    def get_num_entries(self, id):
+        return lib.bolt_get_num_entries(self.obj, id)
 
-    def copy(self, dest, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].copy(dest)
+    def cd(self, id, entryId):
+        lib.bolt_cd(self.obj, id, entryId)
 
-    def mkdir(self, name, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].mkdir(name)
 
-    def createFile(self, name, commander):
-        # Need to pass on ID as well
-        self.commanders[commander].createFile(name)
-
-    def cd(self, commander, id):
-        self.commanders[commander].cd(id)
-
-    def getCwd(self, commander):
-        return self.commanders[commander].getCwd()
-
-    # ==========================================
-    # Explorer to explorer commands
-    # ==========================================
-    # TBD
-    def eToe_copy(self, commander):
-        pass
-
-    # TBD
-    def eToe_Move(self, commander):
-        pass
-
-# ============================================================================
-# Helpers
-# ============================================================================
+if __name__ == "__main__":
+    bolt = Bolt()
+    print("Bolt CWD: " + bolt.get_cwd(0))
+    for i in bolt.get_listing(50, 0, 0):
+        print(bolt.get_entry_name(0, i) + " - " + bolt.get_entry_type(0, i))
+    bolt.cd(0, 1)
+    print("Bolt CWD: " + bolt.get_cwd(0))
+    for i in bolt.get_listing(50, 0, 0):
+        print(bolt.get_entry_name(0, i) + " - " + bolt.get_entry_type(0, i))
