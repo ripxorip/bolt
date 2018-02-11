@@ -9,3 +9,4 @@ crate-type = ["dylib"]
 
 [dependencies]
 core = {path = "../core"}
+libc = "0.2"
