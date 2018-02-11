@@ -1,8 +1,5 @@
 use explorer::Explorer;
-use explorer::BoltListEntry;
-use std::vec;
 use std::env;
-use std::slice;
 
 pub struct Bolt {
     // Declare the explorers
@@ -57,12 +54,12 @@ impl Bolt {
     }
 
     // Change directory for exp_index to folder with id:id
-    pub fn cd(&mut self, exp_index: i32, id: i32) {
+    pub fn cd(&mut self, exp_index: i32, entry_id: i32) {
         if 1 == exp_index{
-            self.exp2.cd(id);
+            self.exp2.cd(entry_id);
         }
         else{
-            self.exp1.cd(id);
+            self.exp1.cd(entry_id);
         }
     }
 }

@@ -41,6 +41,15 @@ pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, offset: int32_t, d
 }
 
 #[no_mangle]
+pub extern fn bolt_cd(ptr: *mut Bolt, id: int32_t, entry_id: int32_t) {
+    let bolt = unsafe {
+        assert!(!ptr.is_null());
+        &mut*ptr
+    };
+    bolt.cd(id, entry_id);
+}
+
+#[no_mangle]
 pub extern fn bolt_get_num_entries(ptr: *const Bolt, id: int32_t) -> int32_t {
     let bolt = unsafe {
         assert!(!ptr.is_null());
