@@ -35,6 +35,11 @@ impl Bolt {
         self.get_exp(exp_index).get_cwd()
     }
 
+    // Get the name for an entry
+    pub fn get_entry_name(&self, exp_index: i32, entry_id: i32) -> String {
+        self.get_exp(exp_index).get_entry_name(entry_id)
+    }
+
     // Gets a list of indexes for the current listing in an explorer
     pub fn get_listing(&self, exp_index: i32, offset: usize, dest: &mut[i32]) -> i32 {
         let v = self.get_exp(exp_index).get_listing();

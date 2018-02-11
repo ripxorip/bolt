@@ -75,6 +75,11 @@ impl Explorer {
         *&self.listing.len() as i32 
     }
 
+    pub fn get_entry_name(&self, id: i32) -> String {
+        let entry_ref = self.get_entry_at_id(id).unwrap();
+        entry_ref.name.clone()
+    }
+
     pub fn cd(&mut self, id: i32){
         if id < 0 {
             self.cwd.pop();
@@ -85,7 +90,6 @@ impl Explorer {
             {
                 let entry_ref = self.get_entry_at_id(id).unwrap();
                 folder_name = entry_ref.name.clone();
-                println!("{}", folder_name);
             }
             self.cwd.push(folder_name);
         }

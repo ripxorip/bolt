@@ -58,3 +58,13 @@ pub extern fn bolt_get_cwd(ptr: *const Bolt, id: int32_t) -> *mut c_char {
     let c_str_ret = CString::new(bolt.get_cwd(id)).unwrap();
     c_str_ret.into_raw()
 }
+
+#[no_mangle]
+pub extern fn bolt_get_entry_name(ptr: *const Bolt, id: int32_t, entry_id: int32_t) -> *mut c_char {
+    let bolt = unsafe {
+        assert!(!ptr.is_null());
+        &*ptr
+    };
+    let c_str_ret = CString::new(bolt.get_entry_name(id, entry_id)).unwrap();
+    c_str_ret.into_raw()
+}
