@@ -71,6 +71,10 @@ impl Explorer {
         &self.listing
     }
 
+    pub fn get_num_entries(&self) -> i32 {
+        *&self.listing.len() as i32 
+    }
+
     pub fn cd(&mut self, id: i32){
         if id < 0 {
             self.cwd.pop();

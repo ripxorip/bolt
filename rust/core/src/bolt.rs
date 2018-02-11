@@ -35,6 +35,10 @@ impl Bolt {
     pub fn get_listing(&self, exp_index: i32) -> &vec::Vec<BoltListEntry> {
         self.get_exp(exp_index).get_listing()
     }
+    
+    pub fn get_num_entries(&self, exp_index: i32) -> i32 {
+        self.get_exp(exp_index).get_num_entries()
+    }
 
     pub fn cd(&mut self, exp_index: i32, id: i32) {
         if 1 == exp_index{

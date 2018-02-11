@@ -15,6 +15,7 @@ pub extern fn bolt_free_string (s: *mut c_char) {
     };
 }
 
+// Class implementation
 #[no_mangle]
 pub extern fn bolt_new () -> *mut Bolt {
     Box::into_raw(Box::new(Bolt::new()))
@@ -43,6 +44,15 @@ pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, dest: *mut int32_t
         dest_slice[i] = v[i].id;
         i += 1;
     }
+}
+
+#[no_mangle]
+pub extern fn bolt_get_num_entries(ptr: *const Bolt, id: int32_t) -> int32_t {
+    let bolt = unsafe {
+        assert!(!ptr.is_null());
+        &*ptr
+    };
+    bolt.get_num_entries(id)
 }
 
 #[no_mangle]
