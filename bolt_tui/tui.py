@@ -1,5 +1,5 @@
 from bolt_tui.explorer_pane import explorer_pane
-from bolt.bolt import bolt
+from bolt.bolt import Bolt
 from math import floor
 
 class tui(object):
@@ -10,7 +10,7 @@ class tui(object):
         self.pane_width = pane_width
         self.height = height
 
-        self.bolt = bolt()
+        self.bolt = Bolt()
 
         self.panes.append(explorer_pane(True, self.bolt.getListing('exp1'), 'exp1', self.bolt.getCwd('exp1'), pane_width, height))
         self.panes.append(explorer_pane(False, self.bolt.getListing('exp2'), 'exp2', self.bolt.getCwd('exp2'), pane_width, height))
