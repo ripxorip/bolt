@@ -1,5 +1,5 @@
 import sys, ctypes
-from ctypes import c_void_p, c_char_p, c_uint32, c_int32, Structure, POINTER
+from ctypes import c_void_p, c_char_p, c_uint32, c_int32, Structure, POINTER, c_size_t
 
 
 class BoltS(Structure):
@@ -12,6 +12,8 @@ lib.bolt_new.restype = POINTER(BoltS)
 lib.bolt_free.argtypes = (POINTER(BoltS), )
 lib.bolt_get_cwd.argtypes = (POINTER(BoltS), c_int32)
 lib.bolt_get_cwd.restype = (c_void_p)
+lib.bolt_free_string.argtypes = (c_void_p, )
+lib.bolt_get_listing.argtypes = (c_void_p, c_int32, POINTER(c_int32), c_size_t)
 
 
 class Bolt:
@@ -26,9 +28,25 @@ class Bolt:
 
     def get_cwd(self, id):
         ptr = lib.bolt_get_cwd(self.obj, id)
-        return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        try:
+            return ctypes.cast(ptr, ctypes.c_char_p).value.decode('utf-8')
+        finally:
+            lib.bolt_free_string(ptr)
+
+    def get_listing(self, amount, id):
+        buf = []
+        for i in range(0, amount):
+            buf.append(0)
+        buf_type = c_int32 * len(buf)
+        rBuf = buf_type(*buf)
+        lib.bolt_get_listing(self.obj, id, rBuf, len(buf))
+        res = []
+        for i in rBuf:
+            res.append(i)
+        return res
 
 
 if __name__ == "__main__":
     bolt = Bolt()
     print("Bolt CWD: " + bolt.get_cwd(0))
+    print(bolt.get_listing(2, 0))
