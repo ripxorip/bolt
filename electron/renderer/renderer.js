@@ -2,6 +2,8 @@
 const fs = require('fs');
 const {shell} = require('electron');
 let $ = window.jQuery = require('jquery');
+
+/* Key handler */
 $(document).on('keydown', function (e) {
   console.log(e);
 }
