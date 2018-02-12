@@ -39,12 +39,3 @@ function openFile(path) {
     console.log(path);
     shell.openItem(path);
 }
-
-//$(document).on("keydown", function (e) {
-//    if ((e.ctrlKey) && e.which === 70) {
-      
-        //70 is keycode for F http://www.alt-codes.net/
-//        console.log("user pressed ctrl+F buttons") ;
-
-//    }
-//});

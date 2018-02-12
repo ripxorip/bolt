@@ -4,5 +4,8 @@
   "description": "A file manager made with electron",
   "main": "index.js",
   "author": "Philip Karlsson",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
 }
