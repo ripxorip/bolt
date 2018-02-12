@@ -1,0 +1,32 @@
+hr {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.shortcut {
+    padding: 2px;
+    display: block;
+    cursor: default;
+}
+
+.shortcut:hover {
+    background: #00abff;
+    color: white;
+}
+
+.displayed-files {
+    padding: 5px;
+    cursor: default;
+
+}
+
+.displayed-files:hover {
+    background: #777777;
+    color: white;
+}
+
+.row {
+    /*text-align: center;*/
+    align-content: center;
+    align-items: center;
+}

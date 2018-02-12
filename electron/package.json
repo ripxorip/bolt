@@ -1,0 +1,8 @@
+{
+  "name": "bolt",
+  "version": "1.0.0",
+  "description": "A file manager made with electron",
+  "main": "index.js",
+  "author": "Philip Karlsson",
+  "license": "ISC"
+}
