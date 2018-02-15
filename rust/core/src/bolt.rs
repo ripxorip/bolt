@@ -50,11 +50,11 @@ impl Bolt {
     }
     
     // Gets a list of indexes for the current listing in an explorer
-    pub fn get_listing(&self, exp_index: i32, offset: usize, dest: &mut[i32]) -> i32 {
+    pub fn get_listing(&self, exp_index: i32, offset: usize, dest: &mut Vec<i32>) -> i32 {
         let v = self.get_exp(exp_index).get_listing();
         let mut i = 0;
-        while i < dest.len() && i + offset < v.len(){
-            dest[i] = v[i].id;
+        while i + offset < v.len(){
+            dest.push(v[i].id);
             i += 1;
         }
         i as i32

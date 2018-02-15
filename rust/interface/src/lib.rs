@@ -37,6 +37,10 @@ pub extern fn bolt_get_listing(ptr: *const Bolt, id: int32_t, offset: int32_t, d
         assert!(!dest.is_null());
         slice::from_raw_parts_mut(dest, len as usize)
     };
+    // FIXME below:
+    // Get the listing in a vector
+    // Copy vector to the slice
+    // Return the number of listed elements
     bolt.get_listing(id, offset as usize, dest_slice)
 }
 
