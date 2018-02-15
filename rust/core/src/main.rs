@@ -10,7 +10,7 @@ fn main() {
     println!("--- Listing exp1 ---");
     // https://doc.rust-lang.org/1.8.0/book/references-and-borrowing.html#the-rules
     {
-        let listing = bolt.get_listing(0);
+        let listing = bolt.get_raw_listing(0);
         for l in listing {
             println!("{}", l.name);
         }
@@ -19,7 +19,7 @@ fn main() {
     bolt.cd(1, 2);
     println!("{}", bolt.get_cwd(1));
     println!("--- Listing exp2 ---");
-    let listing = bolt.get_listing(1);
+    let listing = bolt.get_raw_listing(1);
     for l in listing {
         println!("{}", l.name);
     }
